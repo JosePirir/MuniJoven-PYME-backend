@@ -179,8 +179,34 @@ function login (req, res)
     }
 }
 
+function getUsers(req, res)
+{
+    if('admin' != req.user.role)
+    {
+        res.status(500).send({message: 'No tiene permisos de aministrador'});
+    }
+    else
+    {
+        User.find({}).sort({username: -1}).exec((err, users)=>{
+            if(err)
+            {
+                res.status(500).send({message: 'Error al buscar el usuario'});
+            }
+            else if(users)
+            {
+                res.status(200).send({message: 'Usuarios encontrados: ', users});
+            }
+            else
+            {
+                res.send({message: 'No existe ningun usuario.'});
+            }
+        })
+    }
+}
+
 module.exports = {
     createAdmin,
     saveUser,
+    getUsers,
     login
 }
