@@ -91,7 +91,15 @@ function saveUser(req, res)
                             user.name = params.name;
                             user.lastname = params.lastname;
                             user.username = params.username;
-                            user.role = 'admin';
+
+                            if(params.role == 'admin' && req.user.username != 'admin')
+                            {
+                                return res.status(500).send({message: 'Solo el administrador principal puede crear más administradores.'})
+                            }
+                            else
+                            {
+                                user.role = params.role;
+                            }
 
                             user.save((err, userSaved)=>{
                                 if(err)
