@@ -1,13 +1,15 @@
 'use strict'
 
-const express = require('express');
-const userController = require('../controllers/user.controller');
-const mdAuth = require('../middlewares/authenticated');
+var express = require('express');
+var userController = require('../controllers/user.controller');
+var mdAuth = require('../middlewares/authenticated');
 
-const api = express.Router();
+var api = express.Router();
 
-api.post('/saveUser', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], userController.saveUser);
-api.get('/getUsers', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], userController.getUsers);
 api.post('/login', userController.login);
+api.post('/saveUser', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], userController.saveUser);
+//api.get('/getUsers', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], userController.getUsers);
+api.get('/getUsers', userController.getUsers);
+api.get('/test', userController.test);
 
 module.exports = api;

@@ -1,10 +1,14 @@
 'use strict'
 
-const User = require('../models/user.model');
-const path = require('path');
-const jwt = require('../services/jwt');
-const bcrypt = require('bcrypt-nodejs');
-const fs = require('fs');
+var User = require('../models/user.model');
+var jwt = require('../services/jwt');
+var bcrypt = require('bcrypt-nodejs');
+var fs = require('fs');
+
+function test(req, res)
+{
+    res.status(200).send({message: 'funcionando desde el controlador :D '});
+}
 
 function createAdmin()
 {
@@ -137,7 +141,7 @@ function login (req, res)
 
     if(params.username && params.password)
     {
-        User.findOne({username: params.username}), (err, userFind)=>{
+        User.findOne({username: params.username}, (err, userFind)=>{
             if(err)
             {
                 return res.status(500).send({message: 'Error al encontrar usuarios'});
@@ -171,7 +175,7 @@ function login (req, res)
             {
                 return res.send({message: 'username incorrecto'});
             }
-        }
+        })
     }
     else
     {
@@ -206,7 +210,8 @@ function getUsers(req, res)
 
 module.exports = {
     createAdmin,
+    login,
     saveUser,
     getUsers,
-    login
+    test
 }

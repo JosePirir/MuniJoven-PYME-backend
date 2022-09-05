@@ -1,8 +1,8 @@
 'use strict'
 
-const jwt = require('jwt-simple');
-const moment = require('moment');
-const secretKey = 'encrypt-grupo#1';
+var jwt = require('jwt-simple');
+var moment = require('moment');
+var secretKey = 'encrypt-Grupo1';
 
 exports.ensureAuth = (req, res, next) =>{
     if(!req.headers.authorization)
@@ -11,11 +11,11 @@ exports.ensureAuth = (req, res, next) =>{
     }
     else
     {
-        let token = req.headers.authorization.replace(/['"']+/g,'');
+        var token = req.headers.authorization.replace(/['"']+/g, '');
     }
     try
     {
-        let payload = jwt.decode(token, secretKey);
+        var payload = jwt.decode(token, secretKey);
         if(payload.exp <= moment().unix())
         {
             return res.status(401).send({message: 'Token ha expirado'});
