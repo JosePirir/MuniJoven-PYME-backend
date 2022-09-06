@@ -1,9 +1,9 @@
 'use strict'
 
-var User = require('../models/user.model');
-var jwt = require('../services/jwt');
-var bcrypt = require('bcrypt-nodejs');
-var fs = require('fs');
+const User = require('../models/user.model');
+const jwt = require('../services/jwt');
+const bcrypt = require('bcrypt-nodejs');
+const fs = require('fs');
 
 function test(req, res)
 {

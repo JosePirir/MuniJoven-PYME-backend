@@ -1,8 +1,8 @@
 'use strict'
 
-var jwt = require('jwt-simple');
-var moment = require('moment');
-var secretKey = 'encrypt-Grupo1';
+const jwt = require('jwt-simple');
+const moment = require('moment');
+const secretKey = 'encrypt-Grupo1';
 
 exports.ensureAuth = (req, res, next) =>{
     if(!req.headers.authorization)
