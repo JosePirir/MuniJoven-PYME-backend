@@ -13,12 +13,12 @@ function saveProduct(req, res)
     }
     else
     {
-        if(params.name && params.price && params.link && params.available && params.size && params.gender)
+        if(params.name && params.price && params.link && params.size && params.gender)
         {
             product.name = params.name;
             product.price = params.price;
             product.link = params.link;
-            product.available = params.available;
+            product.available = 'Disponible';
             product.size = params.size;
             product.gender = params.gender;
 
@@ -66,7 +66,7 @@ function editProduct(req, res)
             }
             else
             {
-                res.status(500).send({message: 'No se actualizó el producto'});
+                res.status(500).send({message: 'No se encontró el producto'});
             }
         });
     }
@@ -218,9 +218,37 @@ function deleteProduct(req, res)
     }
 }
 
+function notAvailable (req, res)
+{
+    let productId = req.params.id;
+
+    if('admin' != req.user.role)
+    {
+        res.status(403).send({message: 'No tienes permisos para cambiar el status del producto'});
+    }
+    else
+    {
+        Product.findByIdAndUpdate(productId,{available: false}, (err, product)=>{
+            if(err)
+            {
+                res.status(500).send({message: 'Error al buscar el producto y modificarlo'});
+            }
+            else if(product)
+            {
+                res.status(200).send({message: 'Ahora es un producto no disponible'});
+            }
+            else
+            {
+                res.status(500).send({message: 'No se pudo actualizar el status del producto'});
+            }
+        })
+    }
+}
+
 module.exports = {
     saveProduct,
     editProduct,
     deleteProduct,
-    getProducts
+    getProducts,
+    notAvailable
 }

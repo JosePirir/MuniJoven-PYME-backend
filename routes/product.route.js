@@ -10,5 +10,6 @@ api.post('/saveProduct', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], productCon
 api.put('/editProduct/:id', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], productController.editProduct);
 api.delete('/deleteProduct/:id', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], productController.deleteProduct);
 api.get('/getProducts', productController.getProducts);
+api.put('/notAvailable/:id', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], productController.notAvailable);
 
 module.exports = api;
