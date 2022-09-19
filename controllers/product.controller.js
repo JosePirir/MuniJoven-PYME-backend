@@ -1,6 +1,8 @@
 'use strict'
 
 const Product = require('../models/product.model');
+const path = require('path');
+const fs = require('fs');
 
 function saveProduct(req, res)
 {
@@ -13,11 +15,10 @@ function saveProduct(req, res)
     }
     else
     {
-        if(params.name && params.price && params.link && params.size && params.gender)
+        if(params.name && params.price && params.size && params.gender)
         {
             product.name = params.name;
             product.price = params.price;
-            product.link = params.link;
             product.available = 'Disponible';
             product.size = params.size;
             product.gender = params.gender;
@@ -153,20 +154,20 @@ function getProducts(req, res)
     }
     else
     {
-        Product.find({}).exec((err, productos)=>{
+        Product.find({}).exec((err, products)=>{ /*la respouesta de .find (err, PRODUCTS), es la que lleva la información al frontend */
             if(err)
             {
                 res.status(500).send({message: 'Eror al buscar productos'});
             }
-            else if(productos)
+            else if(products)
             {
-                if(productos.length == 0)
+                if(products.length == 0)
                 {
-                    res.send({message: 'No se encontraron productos'});
+                    res.send({message: 'No se encontraron products'});
                 }
                 else
                 {
-                    res.status(200).send({message: 'Libros encontrados: ',productos});
+                    res.status(200).send({message: 'Libros encontrados: ',products});
                 }
             }
             else
@@ -202,7 +203,7 @@ function deleteProduct(req, res)
                     }
                     else if(productRemoved)
                     {
-                        res.status(200).send({message: 'Libro eliminado'});
+                        res.status(200).send({message: 'Producto eliminado!'});
                     }
                     else
                     {
@@ -245,10 +246,88 @@ function notAvailable (req, res)
     }
 }
 
+function uploadProductImage(req, res)
+{
+    let productId = req.params.id;
+    //let update = req.body;
+    //var fileName;
+
+    if('admin' != req.user.role)
+    {
+        res.status(403).send({message: 'No tienes permiso de actualizar el producto'});
+    }
+    else
+    {
+        if(req.files)
+        {
+            let filePath = req.files.image.path;
+            let fileSplit = String(filePath).split('\\');
+            let fileName = fileSplit[1]; /*error*/
+            let extension = String(fileName).split('\.');
+            let fileExt = extension[1];
+            //console.log('filePath',filePath,"fileSplit",fileSplit,'fileName',fileName ,"extensions",extension,"fileExtension",fileExt);
+            if(fileExt == 'png' || fileExt == 'jpg'|| fileExt =='jpeg' || fileExt =='gif')
+            {
+                Product.findByIdAndUpdate(productId, {image: fileName}, {new:true}, (err, productUpdated)=>{
+                    if(err)
+                    {
+                        res.status(500).send({message: err})
+                    }
+                    else if(productUpdated)
+                    {
+                        res.status(200).send({product: productUpdated, productImage:productUpdated.image});
+                    }
+                    else
+                    {
+                        res.status(400).send({message: 'No se pudo actualizar'});
+                    }
+                })
+            }
+            else
+            {
+                fs.unlink(filePath, (err)=>{
+                    if(err)
+                    {
+                        res.status(500).send({message: 'Extensión no valida y error al eliminar el archivo'});
+                    }
+                    else
+                    {
+                        res.status(400).send({message: 'Extesnsion no valida'});
+                    }
+                })
+            }
+        }
+        else
+        {
+            res.status(400).send({message: 'No has enviado una imagen para subir'});
+        }
+    }
+
+}
+
+function getImageProduct(req, res)
+{
+    let fileName = req.params.fileName;
+    let pathFile = './uploads/' + fileName;
+
+    fs.exists(pathFile, (exists)=>{
+        if(exists)
+        {
+            res.sendFile(path.resolve(pathFile));
+        }
+        else
+        {
+            res.status(404).send({message: 'La imagen no existe'});
+        }
+    })
+}
+
 module.exports = {
     saveProduct,
     editProduct,
     deleteProduct,
     getProducts,
-    notAvailable
+    notAvailable,
+    uploadProductImage,
+    getImageProduct   
 }
