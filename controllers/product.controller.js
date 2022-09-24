@@ -154,7 +154,7 @@ function getProducts(req, res)
     }
     else
     {
-        Product.find({}).exec((err, products)=>{ /*la respouesta de .find (err, PRODUCTS), es la que lleva la información al frontend */
+        Product.find({}).sort({available: 1}).exec((err, products)=>{ /*la respouesta de .find (err, PRODUCTS), es la que lleva la información al frontend */
             if(err)
             {
                 res.status(500).send({message: 'Eror al buscar productos'});

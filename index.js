@@ -1,9 +1,9 @@
 'use strict'
 
 const mongoose = require('mongoose');
-const port = '3200';
 const userController = require('./controllers/user.controller');
 const app = require('./app');
+const port = app.set('port', process.env.PORT || 3200);
 
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost:27017/pyme', {useNewUrlParser: true})
