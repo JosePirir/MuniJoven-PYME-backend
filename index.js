@@ -6,7 +6,7 @@ const app = require('./app');
 const port = app.set('port', process.env.PORT || 3200);
 
 mongoose.Promise = global.Promise;
-mongoose.connect('https://terramoda-fe03b-default-rtdb.firebaseio.com/', {useNewUrlParser: true}) /*cluster atlas*/
+mongoose.connect('mongodb+srv://josepirir:55835439romero@cluster0.otmlw8j.mongodb.net/?retryWrites=true&w=majority', {useNewUrlParser: true}) /*cluster atlas*/
     .then(()=>{
     console.log('Conectado a la base de Datos :D');
     userController.createAdmin();
