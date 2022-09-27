@@ -13,7 +13,7 @@ mongoose.connect('mongodb+srv://josepirir:55835439romero@cluster0.otmlw8j.mongod
     console.log('Conectado a la base de Datos :D');
     userController.createAdmin();
     app.listen(port, ()=>{
-        console.log('servidor de express funcionando :D');
+        console.log('servidor de express funcionando :D ', port);
     })
 })
 .catch((err)=>{console.log('Error al tratar de contectarse a la base de datos', err)});

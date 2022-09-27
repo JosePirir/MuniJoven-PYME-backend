@@ -15,4 +15,8 @@ app.use(cors());
 app.use('/api', userRoutes);
 app.use('/api', productRoutes);
 
+app.get('/', function (req, res){
+    res.send('Funcionando desde heroku');
+})
+
 module.exports = app;
