@@ -15,14 +15,15 @@ function saveProduct(req, res)
     }
     else
     {
-        if(params.name && params.price && params.size && params.gender)
+        if(params.name && params.price && params.size && params.gender && params.brand)
         {
             product.name = params.name;
             product.price = params.price;
             product.available = 'Disponible';
+            product.descripcion = params.descripcion;
             product.size = params.size;
             product.gender = params.gender;
-
+            product.brand = params.brand;
             product.save((err, productSaved)=>{
                 if(err)
                 {
